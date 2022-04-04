@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.calculator-container {
+    height: 100vh;
+    width: 100vh;
+    margin: 0 auto;
+    background-color: gold;
+}
+
+button {
+    padding: 10px;
+}
+.operator {
+    background-color: palevioletred;
+}
+
+.number {
+    background-color: papayawhip;
+}
