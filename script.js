@@ -68,9 +68,12 @@
      operatorButtons.forEach(operator => {
         operator.addEventListener('click', () => {
             operatorsClicked++;
-            if (operatorsClicked > 1) {
+            if (operatorsClicked > 1 && displayValue !== "0") {
                 screenDisplay.textContent = operate(firstNum, displayValue);
                 displayValue = screenDisplay.textContent;
+            }
+            if (operatorsClicked >1 && displayValue === "0") {
+                screenDisplay.textContent = "no dividing by zero!";
             }
             
             firstNum = displayValue;
@@ -105,7 +108,11 @@
     //EQUALS BUTTON
     equals.addEventListener('click', () => {
         secondNum = displayValue;
-        screenDisplay.textContent = operate(firstNum, secondNum);
+            if (secondNum === "0") {
+                screenDisplay.textContent = "no dividing by zero!";
+            } else {
+            screenDisplay.textContent = operate(firstNum, secondNum);
+            }
     })
 
 })()
