@@ -80,7 +80,7 @@
                     oper = add;
                 } else if (oper === "-") {
                     oper = subtract;
-                } else if (oper === "*") {
+                } else if (oper === "x") {
                     oper = sum;
                 } else if (oper === "/") {
                     oper = divide;
