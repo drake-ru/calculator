@@ -58,17 +58,13 @@
             if (displayValue === 0) {
                 displayValue = num.textContent;
                 screenDisplay.textContent = displayValue;
-                //to change the display number to the number you're creating (ie after pressing an operator)
-            } else if (operatorsClicked > 0) {
-                firstNum = displayValue;
-                displayValue = 0;
-                displayValue = num.textContent;
+                //to make multiple-digit numbers 
+            } else if (operatorsClicked === 0) {
+                displayValue += num.textContent;
                 screenDisplay.textContent = displayValue;
-                //operatorsClicked = 0;
-                //to create a number of more than one digit
-            } else {
-                let numb = num.textContent;
-                displayValue += numb;
+                //to change first num to second num after operator has been clicked
+            } else if (operatorsClicked === 1 && displayValue !== 0) {
+                displayValue += num.textContent;
                 screenDisplay.textContent = displayValue;
             }
         })
@@ -83,6 +79,7 @@
                 screenDisplay.textContent = operate(firstNum, displayValue);
             }
             firstNum = displayValue;
+            displayValue = 0;
             let oper = operator.textContent;
                 if (oper === "+") {
                     oper = add;
