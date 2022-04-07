@@ -1,118 +1,99 @@
 
 (function() {
-
-    function add(...nums) {
-        return nums.reduce((total, num) => {
-            return total + parseInt(num);
-        }
-        , 0);
-    }
-
-    function subtract(...nums) {
-        return nums.reduce((total, num) => {
-            return total - num;
-        }
-        );
-    }
-
-    function sum(...nums) {
-        return nums.reduce((total, num) => {
-            return total * num;
-        }
-        );
-    }
-
-    function divide(...nums) {
-        return nums.reduce((total, num) => {
-            return total / num;
-        }
-        );
-    }
-
-    function operate(...nums) {
-        return operation(...nums);
-    }
-
-
     const numberButtons = document.querySelectorAll('.number');
     const operatorButtons = document.querySelectorAll('.operator');
-    const screenDisplay = document.querySelector('.screen');
-    let displayValue = 0;
-    screenDisplay.textContent = displayValue;
-    let firstNum;
-    let secondNum;
-    let operation;
-    let operatorsClicked = 0;
+
+    const calculator = (function() {
+        const screenDisplay = document.querySelector('.screen');
+        let firstNum = null;
+        let operation = null;
+        let recentlyClickedOperator = false;
+
+        const operations = {
+            "+": function (...nums) {
+                return nums.reduce((total, num) => {
+                    return total + parseInt(num);
+                }, 0);
+            },
+            "-": function(...nums) {
+                    return nums.reduce((total, num) => {
+                        return total - num;
+                    }
+                );
+            },
+            "x": function sum(...nums) {
+                    return nums.reduce((total, num) => {
+                        return total * num;
+                    }
+                );
+            },
+            "/": function(...nums) {
+                return nums.reduce((total, num) => {
+                    return total / num;
+                }
+                );
+            }
+        }
+    
+        function operate(...nums) {
+            return operation(...nums);
+        }
+
+        return {
+            receiveNumber: function(numButton) {
+                const content = numButton.textContent;
+                if (screenDisplay.textContent === "0") {
+                    screenDisplay.textContent = content;
+                    recentlyClickedOperator = false;
+                } else if (recentlyClickedOperator) {
+                    firstNum = parseInt(screenDisplay.textContent);
+                    screenDisplay.textContent = content;
+                    recentlyClickedOperator = false;
+                } else {
+                    screenDisplay.textContent += content;
+                }
+            },
+            receiveOperator: function(operator) {
+                recentlyClickedOperator = true;
+                if (firstNum !== null && (screenDisplay.textContent !== "0" || operator !== "/")) {
+                    screenDisplay.textContent = operate(firstNum, parseInt(screenDisplay.textContent));
+                    firstNum = null;
+                } else if (firstNum !== null) {
+                    screenDisplay.textContent = "no dividing by zero!";
+                } else {
+                    firstNum = parseInt(screenDisplay.textContent)
+                    const oper = operator.textContent;
+                    operator = operations[oper];
+                }
+            },
+            receiveClear: function() {
+                recentlyClickedOperator = false;
+                firstNum = null;
+                operation = null;
+                screenDisplay.textContent = "0";
+            },
+            receiveEquals: function() {
+                const secondNum = parseInt(screenDisplay.textContent);
+                if (secondNum === 0 && operator === divide) {
+                    screenDisplay.textContent = "no dividing by zero!";
+                } else {
+                    firstNum = operate(firstNum, secondNum);
+                    screenDisplay.textContent = firstNum;
+                }
+            }
+        }
+    })();
 
     //NUMBER BUTTONS
-    numberButtons.forEach(num => {
-        num.addEventListener('click', () => {
-            //to begin with, before any number is clicked at all
-            if (displayValue === 0) {
-                displayValue = num.textContent;
-                screenDisplay.textContent = displayValue;
-                //to make multiple-digit numbers 
-            } else if (operatorsClicked === 0) {
-                displayValue += num.textContent;
-                screenDisplay.textContent = displayValue;
-                //to change first num to second num after operator has been clicked
-            } else if (operatorsClicked > 0 && displayValue !== 0) {
-                displayValue += num.textContent;
-                screenDisplay.textContent = displayValue;
-            }
-        })
-    })
+    numberButtons.forEach(num => num.addEventListener('click', () => calculator.receiveNumber(num)));
 
-
-     //OPERATOR BUTTONS
-     operatorButtons.forEach(operator => {
-        operator.addEventListener('click', () => {
-            operatorsClicked++;
-            if (operatorsClicked > 1 && displayValue !== "0") {
-                screenDisplay.textContent = operate(firstNum, displayValue);
-                displayValue = screenDisplay.textContent;
-            }
-            if (operatorsClicked >1 && displayValue === "0") {
-                screenDisplay.textContent = "no dividing by zero!";
-            }
-            
-            firstNum = displayValue;
-            displayValue = 0;
-            let oper = operator.textContent;
-                if (oper === "+") {
-                    oper = add;
-                } else if (oper === "-") {
-                    oper = subtract;
-                } else if (oper === "x") {
-                    oper = sum;
-                } else if (oper === "/") {
-                    oper = divide;
-                }
-            operation = oper;
-        })
-    })
-
-    const equals = document.querySelector('#equals');
-    const clear = document.querySelector('#clear');
+    //OPERATOR BUTTONS
+    operatorButtons.forEach(operator => operator.addEventListener('click', () => calculator.receiveOperator(operator)));
 
     //CLEAR BUTTON
-    clear.addEventListener('click', () => {
-        displayValue = 0;
-        operatorsClicked = 0;
-        firstNum = 0;
-        secondNum = 0;
-        operation = undefined;
-        screenDisplay.textContent = displayValue;
-    })
+    document.querySelector('#clear').addEventListener('click', () => calculator.receiveClear())
 
     //EQUALS BUTTON
-    equals.addEventListener('click', () => {
-        secondNum = displayValue;
-            if (secondNum === "0") {
-                screenDisplay.textContent = "no dividing by zero!";
-            } else {
-            screenDisplay.textContent = operate(firstNum, secondNum);
-            }
-    })
+    document.querySelector('#equals').addEventListener('click', () => calculator.receiveEquals())
 
 })()
