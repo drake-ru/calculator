@@ -4,29 +4,25 @@
     function add(...nums) {
         return nums.reduce((total, num) => {
             return total + parseInt(num);
-        }
-        , 0);
+        }, 0);
     }
 
     function subtract(...nums) {
         return nums.reduce((total, num) => {
             return total - num;
-        }
-        );
+        });
     }
 
     function sum(...nums) {
         return nums.reduce((total, num) => {
             return total * num;
-        }
-        );
+        });
     }
 
     function divide(...nums) {
         return nums.reduce((total, num) => {
             return total / num;
-        }
-        );
+        });
     }
 
     function operate(...nums) {
@@ -68,12 +64,13 @@
      operatorButtons.forEach(operator => {
         operator.addEventListener('click', () => {
             operatorsClicked++;
-            if (operatorsClicked > 1 && displayValue !== "0") {
+            if (operatorsClicked > 1) {
+                if (operation === divide && displayValue === "0") {
+                    screenDisplay.textContent = "no dividing by zero!";
+                } else {
                 screenDisplay.textContent = operate(firstNum, displayValue);
                 displayValue = screenDisplay.textContent;
-            }
-            if (operatorsClicked >1 && displayValue === "0") {
-                screenDisplay.textContent = "no dividing by zero!";
+                }
             }
             
             firstNum = displayValue;
@@ -108,7 +105,7 @@
     //EQUALS BUTTON
     equals.addEventListener('click', () => {
         secondNum = displayValue;
-            if (secondNum === "0") {
+            if (operation === divide && secondNum === "0") {
                 screenDisplay.textContent = "no dividing by zero!";
             } else {
             screenDisplay.textContent = operate(firstNum, secondNum);
@@ -116,3 +113,5 @@
     })
 
 })()
+
+//SORT OUT THE DIVIDING BY ZERO MESSAGE  BC IT BLOODY WENT AND DID IT FOR THE MINUS FGS lol look above dumbass
