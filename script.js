@@ -113,5 +113,3 @@
     })
 
 })()
-
-//SORT OUT THE DIVIDING BY ZERO MESSAGE  BC IT BLOODY WENT AND DID IT FOR THE MINUS FGS lol look above dumbass
