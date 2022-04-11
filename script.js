@@ -104,8 +104,9 @@
         })
     })
 
-    //adding keyboard support for operator buttons
+    //ADDING KEYBOARD SUPPORT FOR OPERATOR BUTTONS
    document.addEventListener('keydown', (operatorEvent) => {
+       //FOR ADDITION BUTTON (SHIFT AND PLUS KEY COMBO)
        if (operatorEvent.shiftKey && operatorEvent.key === '+') {
            operatorsClicked++;
            if (operatorsClicked > 1) {
@@ -127,6 +128,7 @@
             } else if (operatorEvent.key === "/") {
                 operation = divide;
             }
+        //FOR OTHER OPERATORS - SUBTRACT, DIVIDE AND MULTIPLY    
        } else if (operatorEvent.key !== '-' && operatorEvent.key !== '/' && operatorEvent.key !== 'x') {
            return;
        } else {
@@ -151,10 +153,8 @@
                     operation = divide;
                 }
         }
-       })
-   
+    })
         
-
     const equals = document.querySelector('#equals');
     const clear = document.querySelector('#clear');
 
@@ -176,6 +176,18 @@
             } else {
             screenDisplay.textContent = operate(firstNum, secondNum);
             }
+    })
+
+    //ADDING KEYBOARD SUPPORT FOR THE EQUALS BUTTON
+    document.addEventListener('keydown', (equalsEvent) => {
+        if (equalsEvent.key === 'Enter') {
+            secondNum = displayValue;
+            if (operation === divide && secondNum === "0") {
+                screenDisplay.textContent = "no dividing by zero!";
+            } else {
+            screenDisplay.textContent = operate(firstNum, secondNum);
+            }
+        }
     })
 
 })()
